@@ -5,7 +5,7 @@ Cybersecurity Project 1 Secure Redundant Webservers with ELK Stack Monitoring
 
 The files in this repository were used to configure the network depicted below.
 
-!(Diagrams/XCorpTandT_Net_Diagram_with_ELK.pdf) 
+[ https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Diagrams/XCorpTandT_Net_Diagram_with_ELK.pdf ] (Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/Diagrams/XCorpTandT_Net_Diagram_with_ELK.pdf) 
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above. Alternatively, select portions of the _____ file may be used to install only certain pieces of it, such as Filebeat.
 
