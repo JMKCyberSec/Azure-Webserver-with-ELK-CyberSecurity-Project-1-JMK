@@ -111,7 +111,9 @@ SSH into the control node and follow the steps below:
    - filebeatplaybook.yml
    - metricbeatplaybook.yml
 - _Which file do you update to make Ansible run the playbook on a specific machine? You update the /etc/ansible/hosts file and you can call out different groups    in which the playbook will look for to know what machines to run the playbook on. See image: 
-- _How do I specify which machine to install the ELK server on versus which to install Filebeat on? In the playbook file in the very first section on line 3 it      calls out which host to look for to run the playbook on. You edit that line to either webservers or elk in this scenario. (You have at this point already        defined what machines are in the webservers group and what machines are in the elk group. 
+- _How do I specify which machine to install the ELK server on versus which to install Filebeat on? In the playbook file in the very first section on line 3 it      calls out which host to look for to run the playbook on. 
+             See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/playbook_which_host.png 
+                 You edit that line to either webservers or elk in this scenario. (You have at this point already defined what machines are in the webservers                      group and what machines are in the elk group. 
 - _Which URL do you navigate to in order to check that the ELK server is running? http://20.94.216.169:5601/ 
 
 If you would like to install an ELK server onto you system I have provided the following step by step directions utilizing the files in this repository. 
