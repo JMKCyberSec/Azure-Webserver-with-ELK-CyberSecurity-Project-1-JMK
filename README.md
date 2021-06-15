@@ -69,29 +69,42 @@ The ELKPlaybook.yml is a ansible playbook that implements the following tasks:
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
-![TODO: Update the path with the name of your screenshot of docker ps output](Images/docker_ps_output.png)
+https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
-- _TODO: List the IP addresses of the machines you are monitoring_
+| Name   | Private IP Address |
+|--------|--------------------|
+| Web-1  | 10.0.0.5           |
+| Web-2  | 10.0.0.6           |
+| Web-3  | 10.0.0.7           |
 
 We have installed the following Beats on these machines:
-- _TODO: Specify which Beats you successfully installed_
+| Name   | Private IP Address | Filebeat  | Metricbeat |
+|--------|--------------------|-----------|------------|
+| Web-1  | 10.0.0.5           | Installed | Installed  |
+| Web-2  | 10.0.0.6           | Installed | Installed  |
+| Web-3  | 10.0.0.7           | Installed | Installed  |
 
 These Beats allow us to collect the following information from each machine:
-- _TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
+- ... Filebeat allows us to collect system log information from each of the machines. We are able to see a wide array of log info including items such as log-in       attempts, sudo use, user additions or changes, and other logs.
+- ... Metricbeat allows us to send data that is collected and put it into a specified output to make it more valuable. We are able to view all types of metrics         from CPU usage to memory utilization, Internet traffic flow, traffic source and destinations and a great deal more.  
 
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
-- Copy the _____ file to _____.
-- Update the _____ file to include...
-- Run the playbook, and navigate to ____ to check that the installation worked as expected.
+- Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml.
+- Update the hosts file to include any of the VM's you want to install the filebeat utility on.
+   - [webservers]
+   - 10.0.0.5 ansible_python_interpreter=/usr/bin/python3
+   - 10.0.0.6 ansible_python_interpreter=/usr/bin/python3
+   - 10.0.0.7 ansible_python_interpreter=/usr/bin/python3
+- Run the playbook, and navigate to Kibana to verify that the installation worked as expected.
 
 _TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
+- _Which file is the playbook? Ansible playbook files end in .yml Both the filebeat and metricbeat playbooks are contained in /etc/ansible/roles/ 
+- _Which file do you update to make Ansible run the playbook on a specific machine? You update the /etc/ansible/hosts file and you can call out different groups    in which the playbook will look for to know what machines to run the playbook on. How do I specify which machine to install the ELK server on versus which to    install Filebeat on? In the playbook file in the very first section on line 3 it calls out which host to look for to run the playbook on. You edit that line      to either webservers or elk in this scenario. (You have at this point already defined what machines are in the webservers group and what machines are in the      elk group. 
+- _Which URL do you navigate to in order to check that the ELK server is running? http://20.94.216.169:5601/ 
 
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+If you would like to install an ELK server onto you system I have provided the following step by step directions utilizing the files in this repository. 
