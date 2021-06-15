@@ -11,7 +11,7 @@ These files have been tested and used to generate a live ELK deployment on Azure
    - https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/ELKplaybook.yml 
 
 This document contains the following details:
-- Description of the Topologu
+- Description of the Topology
 - Access Policies
 - ELK Configuration
   - Beats in Use
@@ -41,20 +41,19 @@ The configuration details of each machine may be found below.
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the Jump-Box machine (public IP address 20.97.168.124) can accept ssh connections from the Internet. To ensure the ssh connections are secure, we utilized asymmetrical keys for sign-in/authentication. Access to the Jump-box is only allowed from an authorized host desktop machine from the following IP address:
-- 173.20.35.5
+Only the Jump-Box machine (public IP address 20.97.168.124) can accept ssh connections from the Internet. To ensure the ssh connections are secure, we utilized asymmetrical keys for sign-in/authentication. Access to the Jump-box is only allowed from an authorized host desktop machine from the following IP address -  173.20.35.5
 
-Machines within the network can only be accessed by the Jump-Box VM (Private IP address 10.0.0.4) utilizing sign-in to a docker container which incorporates a unique set of asemmertical keys to ssh to each individual server.
+Machines within the network can only be accessed by the Jump-Box VM (Private IP address 10.0.0.4) utilizing connection to a docker container which incorporates a unique set of asemmertical keys to ssh to each individual server. (Keys differ from the initial Authorized Host Machine to the Jump-Box keys)
 
 A summary of the access policies in place can be found in the table below.
 
-| Name                   | Publicly Accessible  | Allowed IP Addresses |
-|------------------------|----------------------|----------------------|
-| Jump-Box               | Restricted via ssh   | 173.20.35.5          |
-| Web-1 DVWA             | Restricted           | 173.20.35.5          |
-| Web-2 DVWA             | Restricted           | 173.20.35.5          |
-| Web-3 DVWA             | Restricted           | 173.20.35.5          |
-| ELK Monitoring Server  | Restricted port 5601 | 173.20.35.5          |
+| Name                   | Publicly Accessible     | Allowed IP Addresses |
+|------------------------|-------------------------|----------------------|
+| Jump-Box               | No/Restricted via ssh   | 173.20.35.5          |
+| Web-1 DVWA             | No/Restricted           | 173.20.35.5          |
+| Web-2 DVWA             | No/Restricted           | 173.20.35.5          |
+| Web-3 DVWA             | No/Restricted           | 173.20.35.5          |
+| ELK Monitoring Server  | No/Restricted port 5601 | 173.20.35.5          |
 
 ### Elk Configuration
 
