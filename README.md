@@ -105,12 +105,15 @@ SSH into the control node and follow the steps below:
 - Run the playbook, and navigate to Kibana to verify that the installation worked as expected.
 
 **** FAQ's
-- _Which file is the playbook? Ansible playbook files end in .yml Playbook files used for this system are as follows;
-   - DVWAPlaybook.yml
-   - ELKplaybbok.yml
-   - filebeatplaybook.yml
-   - metricbeatplaybook.yml
-- _Which file do you update to make Ansible run the playbook on a specific machine? You update the /etc/ansible/hosts file and you can call out different groups    in which the playbook will look for to know what machines to run the playbook on. See image: 
+- _Which file is the playbook? Ansible playbook files end in '.yml'. Playbook files used for this system are as follows;
+   - DVWAPlaybook.yml         (Builds the DVWA web application on specified machines)
+   - ELKplaybbok.yml          (Builds the ELK application onto the specified ELK Server)
+   - filebeatplaybook.yml     (Installs the filebeat application onto the DVWA Servers)
+   - metricbeatplaybook.yml   (Installs the metricbeat application onto the DVWA Servers)
+
+- _Which file do you update to make Ansible run the playbook on a specific machine? You update the /etc/ansible/hosts file and you can call out different groups    in which the playbook will look for to know what machines to run the playbook on. 
+             See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Ansible_hosts.png 
+
 - _How do I specify which machine to install the ELK server on versus which to install Filebeat on? In the playbook file in the very first section on line 3 it      calls out which host to look for to run the playbook on. 
              See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/playbook_which_host.png 
                  You edit that line to either webservers or elk in this scenario. (You have at this point already defined what machines are in the webservers                      group and what machines are in the elk group. 
