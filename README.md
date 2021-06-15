@@ -119,4 +119,5 @@ SSH into the control node and follow the steps below:
                  You edit that line to either webservers or elk in this scenario. (You have at this point already defined what machines are in the webservers                      group and what machines are in the elk group. 
 - _Which URL do you navigate to in order to check that the ELK server is running? http://20.94.216.169:5601/ 
 
-If you would like to install an ELK server onto you system I have provided the following step by step directions utilizing the files in this repository. 
+***** If you would like to install an ELK server onto you system I have provided the following commands that you will utilize when installing the files in this repository. 
+- 
