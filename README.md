@@ -6,7 +6,7 @@ The files in this repository were used to configure the network depicted below.
 
 [ https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Diagrams/XCorpTandT_Net_Diagram_with_ELK.pdf ] (Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/Diagrams/XCorpTandT_Net_Diagram_with_ELK.pdf) 
 
-These files have been tested and used to generate a live ELK deployment on Azure. They can be used to recreate the entire deployment pictured above. Alternatively, select anisble-playbook files may be used to install only certain pieces of it, such as Filebeat. Below are the 4 playbooks in order of deployment when building and configuring the Network above. 
+These files have been tested and used to generate a live ELK deployment on Azure. They can be used to recreate the entire deployment pictured above. Alternatively, select ansible-playbook files may be used to install only certain pieces of it, such as Filebeat. Below are the 4 playbooks in order of deployment when building and configuring the Network above. 
 
    - https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/DVWAPlaybook.yml
    - https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/ELKplaybook.yml 
@@ -26,43 +26,44 @@ This document contains the following details:
 
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
 
-Load balancing ensures that the application will be highly available, in addition to restricting access to the network.
+Load balancing ensures that the application will be highly available, in addition Load Balancers help to prevent server overloads. Utilization of the Jump-Box ensures access to the network is restricted to one authorized machine from one IP address and with a set of asymmetrical keys. For the purposes of this setup, we only opened access to the DVWA from our home IP address but if you wanted to make this publically available, you would want to change the Azure Network Security Rule to allow "any" sources. Access to the DVWA is made possible by nagvigating to ip address 20.97.166.11.  
 
-Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the system files and system statistics.
+Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the system files and evaluate system statistics.
 
 The configuration details of each machine may be found below.
 
-| Name         | Function        | IP Address | Operating System           |
-|--------------|-----------------|------------|----------------------------|
-| Jump-Box     | Gateway         | 10.0.0.4   | Linux                      |
-| Web-1        | Webserver DVWA  | 10.0.0.5   | Linux w/ Docker Container  |
-| Web-2        | Webserver DVWA  | 10.0.0.6   | Linux w/ Docker Container  |
-| Web-3        | Webserver DVWA  | 10.0.0.7   | Linux w/ Docker Container  |
-| ELK-Stack VM | Monitor/Logging | 10.1.0.4   | Linux w/ Docker Container  |
+| Name         | Function        | Internal IP Address | Public Ip Address  | Operating System           |
+|--------------|-----------------|---------------------|--------------------|----------------------------|
+| Jump-Box     | Gateway         | 10.0.0.4            | 20.97.168.124      | Linux                      |
+| Web-1        | Webserver DVWA  | 10.0.0.5            | 20.97.166.11 *     | Linux w/ Docker Container  |
+| Web-2        | Webserver DVWA  | 10.0.0.6            | 20.97.166.11 *     | Linux w/ Docker Container  |
+| Web-3        | Webserver DVWA  | 10.0.0.7            | 20.97.166.11 *     | Linux w/ Docker Container  |
+| ELK-Stack VM | Monitor/Logging | 10.1.0.4            | 20.94.216.169:5601 | Linux w/ Docker Container  |
+  * This is the ip address of the load balancer. Web-1,-2,-3 do not inherently have a public ip address. 
 
 ### Access Policies
 
 The machines on the internal network are not exposed to the public Internet. 
 
-Only the Jump-Box machine (public IP address 20.97.168.124) can accept ssh connections from the Internet. To ensure the ssh connections are secure, we utilized asymmetrical keys for sign-in/authentication. Access to the Jump-box is only allowed from the authorized host desktop machine from the following public IP address -  173.20.35.5
+Only the Jump-Box machine (public IP address 20.97.168.124) can accept ssh connections from the Internet. To ensure the ssh connections are secure, we utilized asymmetrical keys for sign-in/authentication. Access to the Jump-box is only allowed from the authorized host desktop machine from the following public IP address -  173.***.***.***
 
-Machines within the network can only be accessed by the Jump-Box VM (Private IP address 10.0.0.4) utilizing connection to a docker container which incorporates a unique set of asemmertical keys to ssh to each individual server. (Keys differ from the initial Authorized Host Machine to the Jump-Box keys)
+Machines within the network can only be accessed by the Jump-Box VM (Private IP address 10.0.0.4) utilizing connection to a docker container which incorporates a unique set of asymmetrical keys to ssh to each individual server (Web-1, Web-2, Web-3, ELK-Stack. (Keys differ from the initial Authorized Host Machine to the Jump-Box keys)
 
 A summary of the access policies in place can be found in the table below.
 
-| Name                   | Publicly Accessible     | Allowed IP Addresses | Allow Port 80 IP Adresses | Allow Port 5601 Ip Addresses |
-|------------------------|-------------------------|----------------------|---------------------------|------------------------------|
-| Jump-Box               | No/Restricted via ssh   | 173.20.35.5          | Not Allowed               | Not Allowed                  |
-| Web-1 System           | No/Restricted           | 10.0.0.4             | Yes / 173.20.35.5         | Not Allowed                  |
-| Web-2 System           | No/Restricted           | 10.0.0.4             | Yes / 173.20.35.5         | Not Allowed                  |
-| Web-3 System           | No/Restricted           | 10.0.0.4             | Yes / 173.20.35.5         | Not Allowed                  |
-| ELK Monitoring Server  | No/Restricted           | 10.0.0.4             | Not Allowed               | Yes / 173.20.35.5            |
+| Name                   | Publicly Accessible     | Allowed IP Addresses | Allow Port 80 IP Addresses | Allow Port 5601 Ip Addresses |
+|------------------------|-------------------------|----------------------|----------------------------|------------------------------|
+| Jump-Box               | No/Restricted via ssh   | 173.***.***.***      | Not Allowed                | Not Allowed                  |
+| Web-1 System           | No/Restricted           | 10.0.0.4             | Yes / 173.***.***.***      | Not Allowed                  |
+| Web-2 System           | No/Restricted           | 10.0.0.4             | Yes / 173.***.***.***      | Not Allowed                  |
+| Web-3 System           | No/Restricted           | 10.0.0.4             | Yes / 173.***.***.***      | Not Allowed                  |
+| ELK Monitoring Server  | No/Restricted           | 10.0.0.4             | Not Allowed                | Yes / 173.***.***.***        |
 
 ### Elk Configuration
 
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because additional VM's or entire environments can be brought online very quickly and with few, if any issues.
 
-The ELKPlaybook.yml is a ansible playbook that implements the following tasks:
+The ELKPlaybook.yml is an ansible playbook that implements the following tasks:
 - ... Installs docker.io and pip3 
 - ... Utilizes pip3 to run python scripts
 - ... Expands the memory for a more stable environment
@@ -97,7 +98,7 @@ In order to use the playbook, you will need to have an Ansible control node alre
 
 SSH into the control node and follow the steps below:
 - Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml.
-- Update the hosts file to include any of the VM's you want to install the filebeat utility on.
+- Update the hosts file to include any of the VM's you want to install the Filebeat utility on.
    - [webservers]
    - 10.0.0.5 ansible_python_interpreter=/usr/bin/python3
    - 10.0.0.6 ansible_python_interpreter=/usr/bin/python3
