@@ -86,8 +86,9 @@ These Beats allow us to collect the following information from each machine:
 It is a good idea to run the following commands in the Command Line on your host machine and then copy the SSH key string to your clipboard. When you create the VM's in Azure, you can paste the key into the use existing key field. 
    -  `ssh-keygen`
    -  `cat ~/.ssh/id_rsa.pub` 
-   -  This key you will use to log into your Jump-Box and you can use it while setting up your other VM's however, you will need to generate a different set of keys in your ansible container that resides inside your Jump-Box VM once you get the container installed for Web-1, Web-2, Web-3, and ELKStack VM's. Navagation to each VM in the Azure Web Portal and scrolling down in the menu to password reset will be required once the container is up and running. See image:
-   -  
+   -  This key you will use to log into your Jump-Box and you can use it while setting up your other VM's however, you will need to generate a different set of keys in your ansible container that resides inside your Jump-Box VM once you get the container installed for Web-1, Web-2, Web-3, and ELKStack VM's. Navagation to each VM in the Azure Web Portal and scrolling down in the menu to password reset will be required once the container is up and running. 
+   -  See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/AzureVMresetPassword.png 
+
 
 We used Microsoft Azure to build our virtual environment. The following Azure resources were created.
 - 1). Resource Group - ResourceGroupA, region: East US 2.  All resources were contained inside this resource group
