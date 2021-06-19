@@ -51,28 +51,15 @@ Machines within the network can only be accessed by the Jump-Box VM (Private IP 
 
 A summary of the access policies in place can be found in the table below.
 
-| Name                   | Publicly Accessible     | Allowed IP Addresses | Allow Port 80 IP Addresses | Allow Port 5601 Ip Addresses |
-|------------------------|-------------------------|----------------------|----------------------------|------------------------------|
-| Jump-Box               | No/Restricted via ssh   | 173.***.***.***      | Not Allowed                | Not Allowed                  |
-| Web-1 System           | No/Restricted           | 10.0.0.4             | Yes / 173.***.***.***      | Not Allowed                  |
-| Web-2 System           | No/Restricted           | 10.0.0.4             | Yes / 173.***.***.***      | Not Allowed                  |
-| Web-3 System           | No/Restricted           | 10.0.0.4             | Yes / 173.***.***.***      | Not Allowed                  |
-| ELK Monitoring Server  | No/Restricted           | 10.0.0.4             | Not Allowed                | Yes / 173.***.***.***        |
+| Name          | Publicly Accessible  | Public     --IP Addresses--    Private  | Allowed by; IP Address:Port |
+|---------------|----------------------|-----------------------------------------|-----------------------------|
+| Jump-Box      |     No/Restricted    | 20.97.168.124                  10.0.0.4 |          173.XXX.XXX.XXX:22 |
+| Load-Balancer |     No/Restricted    | 20.97.166.11:80           No Private IP |          173.XXX.XXX.XXX:80 |
+| Web-1         |          No          | No Public IP                   10.0.0.5 |         (LB - 20.97.166.11) |
+| Web-2         |          No          | No Public IP                   10.0.0.6 |         (LB - 20.97.166.11) |
+| Web-3         |          No          | No Public IP                   10.0.0.7 |         (LB - 20.97.166.11) |
+| ELK-Stack     |     No/Restricted    | 20.94.216.169                  10.1.0.4 |        173.XXX.XXX.XXX:5601 |
 
-### Elk Configuration
-
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because additional VM's or entire environments can be brought online very quickly and with few, if any issues.
-
-The ELKPlaybook.yml is an ansible playbook that implements the following tasks:
-- ... Installs docker.io and pip3 
-- ... Utilizes pip3 to run python scripts
-- ... Expands the memory for a more stable environment
-- ... Downloads and configures the following ELK Docker Container Image: sebp/elk:761
-- ... Enables docker service upon boot
-
-The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
-
-https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
@@ -92,6 +79,55 @@ We have installed the following Beats on these machines:
 These Beats allow us to collect the following information from each machine:
 - ... Filebeat allows us to collect system log information from each of the machines. We are able to see a wide array of log info including items such as log-in       attempts, sudo use, user additions or changes, and other logs.
 - ... Metricbeat allows us to send data that is collected and put it into a specified output to make it more understandable. We are able to view all types of           metrics from CPU usage to Memory Utilization, Uptime, Internet Traffic Flow, Traffic Source and Destinations and a great deal more.  
+
+
+### Azure Configuration 
+
+It is a good idea to run the following commands in the Command Line on your host machine and then copy the SSH key string to your clipboard. When you create the VM's in Azure, you can paste the key into the use existing key field. 
+   -  `ssh-keygen`
+   -  `cat ~/.ssh/id_rsa.pub` 
+   -  This key you will use to log into your Jump-Box and you can use it while setting up your other VM's however, you will need to generate a different set of keys in your ansible container that resides inside your Jump-Box VM once you get the container installed for Web-1, Web-2, Web-3, and ELKStack VM's. Navagation to each VM in the Azure Web Portal and scrolling down in the menu to password reset will be required once the container is up and running. See image:
+   -  
+
+We used Microsoft Azure to build our virtual environment. The following Azure resources were created.
+- 1). Resource Group - ResourceGroupA, region: East US 2.  All resources were contained inside this resource group
+- 2). Virtual Network 1 of 2 - JMKCyberSecVNetA, region: East US 2, ip addresses: default, DDoS Protection: DISABLE.
+- 3). Network Security Group (NSG) - JMKCSVNSG, region: East US 2, created with an initial DENY ALL security rule.
+- 4). Virtual Machine 1 of 5 - Jump-Box, region: East US 2, size: B1s, must have public IP.
+- 5). Virtual Machine 2 of 5 - Web-1, region: East US 2, size: B1ms, must NOT have a public IP.
+- 6). Virtual Machine 3 of 5 - Web-2, region: East US 2, size: B1ms, must NOT have a public IP.
+- 7). Virtual Machine 4 of 5 - Web-3, region: East US 2, size: B1ms, must NOT have a public IP. 
+- 8). Load Balancer
+      - Add a Health Probe TCP Protocol, port 80.
+      - Add a Backend Pool and add Web-1 Web-2 and Web-3 to it. 
+      - Add a Load Balancing Rule TCP, to allow port 80, backend port 80 as well, select your Health Probe and Backend Pool, Client IP and Protocol Persistance.
+- 9). Virtual Network 2 of 2 - ELKVNet, region: West US 2, IP Addresses: default, DDoS Protection: DISABLE.
+      - Peering - Create a peer connection between your 2 Virtual Networks (since your VNets are located in different regions).
+- 10). Virtual Machine 5 of 5 - ELKStack, region: West US 2, size: B2s (must be minimum 4GB RAM) must have a public IP.
+
+
+
+
+
+
+
+### Ansible/Docker Container Configuration 
+
+### Elk Configuration
+
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because additional VM's or entire environments can be brought online very quickly and with few, if any, issues.
+
+The ELKPlaybook.yml is an ansible playbook that implements the following tasks:
+- ... Installs docker.io and pip3 
+- ... Utilizes pip3 to run python scripts
+- ... Expands the memory for a more stable environment
+- ... Downloads and configures the following ELK Docker Container Image: sebp/elk:761
+- ... Enables docker service upon boot
+
+The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
+
+https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png
+
 
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
