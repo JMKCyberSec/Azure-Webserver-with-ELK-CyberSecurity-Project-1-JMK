@@ -83,14 +83,15 @@ These Beats allow us to collect the following information from each machine:
 
 ### Azure Configuration 
 
-It is a good idea to run the following commands in the Command Line on your host machine and then copy the SSH key string to your clipboard. When you create the VM's in Azure, you can paste the key into the use existing key field. 
+It is a good idea to generate a key pair on your host machine to prepare you for the Azure environment setup. To create the key, run the following commands in the Command Line on your host machine and then copy the SSH key string to your clipboard. When you create the VM's in Azure, you can paste the key into the use existing key field. 
    -  `ssh-keygen`
    -  `cat ~/.ssh/id_rsa.pub` 
-   -  This key you will use to log into your Jump-Box and you can use it while setting up your other VM's however, you will need to generate a different set of keys in your ansible container that resides inside your Jump-Box VM once you get the container installed for Web-1, Web-2, Web-3, and ELKStack VM's. Navagation to each VM in the Azure Web Portal and scrolling down in the menu to password reset will be required once the container is up and running. 
+   -  This key you will use to log into your Jump-Box and you can use it while setting up your other VM's. However, you will need to generate a different set of keys in your ansible container that resides inside your Jump-Box VM once you get the container installed for Web-1, Web-2, Web-3, and ELKStack VM's. This increases security of the Azure environment by utilizing two different set of keys. Navagation to each VM in the Azure Web Portal and scrolling down in the menu to password reset will be required once the container is up and running and the second set of keys are generated inside the container. 
+   
    -  See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/AzureVMresetPassword.png 
 
 
-We used Microsoft Azure to build our virtual environment. The following Azure resources were created.
+We used Microsoft Azure to build our virtual environment. The following Azure resources were created and utilized;
 - 1). Resource Group - ResourceGroupA, region: East US 2.  All resources were contained inside this resource group
 - 2). Virtual Network 1 of 2 - JMKCyberSecVNetA, region: East US 2, ip addresses: default, DDoS Protection: DISABLE.
 - 3). Network Security Group (NSG) - JMKCSVNSG, region: East US 2, created with an initial DENY ALL security rule.
@@ -98,21 +99,45 @@ We used Microsoft Azure to build our virtual environment. The following Azure re
 - 5). Virtual Machine 2 of 5 - Web-1, region: East US 2, size: B1ms, must NOT have a public IP.
 - 6). Virtual Machine 3 of 5 - Web-2, region: East US 2, size: B1ms, must NOT have a public IP.
 - 7). Virtual Machine 4 of 5 - Web-3, region: East US 2, size: B1ms, must NOT have a public IP. 
-- 8). Load Balancer
-      - Add a Health Probe TCP Protocol, port 80.
-      - Add a Backend Pool and add Web-1 Web-2 and Web-3 to it. 
-      - Add a Load Balancing Rule TCP, to allow port 80, backend port 80 as well, select your Health Probe and Backend Pool, Client IP and Protocol Persistance.
+- 8). Load Balancer - LoadBalancer_JMK1
+      - Add a Health Probe - JMK_Health_Probe: TCP Protocol, port 80.
+      - Add a Backend Pool - JMK_BackendPool: add Web-1 Web-2 and Web-3 to it. 
+      - Add a Load Balancing Rule - JMK_LoadBalance_Rule1: TCP, to allow port 80, backend port 80 as well, select your Health Probe and Backend Pool, Client IP and Protocol Persistance.
 - 9). Virtual Network 2 of 2 - ELKVNet, region: West US 2, IP Addresses: default, DDoS Protection: DISABLE.
       - Peering - Create a peer connection between your 2 Virtual Networks (since your VNets are located in different regions).
 - 10). Virtual Machine 5 of 5 - ELKStack, region: West US 2, size: B2s (must be minimum 4GB RAM) must have a public IP.
 
 
-
-
-
-
-
 ### Ansible/Docker Container Configuration 
+
+One of the most critical components of this system is the Ansible Docker Container we use to add an additional step to the login-process of accessing our Azure environment system files. Below you will find commands that guide you through the process.
+- Start by installing docker.io on the Jump-Box;
+   - Run `sudo apt update` - this will discover what updates are available. 
+   - Run `sudo apt install docker.io` - this will install the most currect docker.io
+   - Run `sudo systemctl status docker` - run this to confirm that docker is if it is not run `sudo systemctl start docker`
+   - Run `sudo docker pull cyberxsecurity/ansible` - this will pull the cyberxsecurity/ansible container.
+   - Run `sudo docker run -ti cyberxsecurity/ansible:latest bash` - this will start the container for the initial run, do not use this to subsequently start the container (it will build a new container). 
+   - Navigate to your Azure Web Portal Network Security Group. 
+    - Create a Inbound Rule that allows your Jump-box full access via SSH to your VNet - Source port: *, Destination: VNet, Dest Port: 22, Protocol: TCP, ALLOW
+   - Using your Command line logged into your Jump-Box run `sudo docker container list -a` to list you containers and see your container name, take note. 
+   - Run `sudo docker start "yourcontainer_name"` - This starts the container.
+   - Run `sudo docker attach "yourcontainer_name"` - This logs you into your container.
+   - Run `ssh-keygen` to create the new SSH key that you will use for Web-1 Web-2 Web-3 and ELKStack. 
+   - Run `cat .ssh/id_rsa.pub` - this will output the public key. You will want to copy it to your clipboard.
+   - Go back to you Azure Web Portal and change Web-1 Web-2 Web-3 and ELKStack VM's password. Choose "Use existing key".
+   - Paste the public key from your clipboard into the appropriate field. Click Save and confirm the key has changed in notifications.
+   - Go back to your command line and verify you can ssh into each VM. 
+   - From your container Run `ssh azadmin@10.0.0.5` - this will log you into Web-1 (Note: your username and IP may differ)
+   - Run `exit`
+   - From your container Run `ssh azadmin@10.0.0.6` - this will log you into Web-1 (Note: your username and IP may differ)
+   - Run `exit`    
+   - From your container Run `ssh azadmin@10.0.0.7` - this will log you into Web-1 (Note: your username and IP may differ)
+   - Run `exit`
+   - From your container Run `ssh ELKadmin@10.1.0.4` - this will log you into Web-1 (Note: your username and IP may differ)
+   - Run `exit`
+   - Run `cd /etc/ansible` - This will navigate you into the Containers /etc/ansible folder.
+   - Run `ls` = this will list the contents and you should verify that you have a hosts file and an ansible.cfg file. 
+   - The /etc/ansible/hosts file should match this (IP addresses may differ)  
 
 ### Elk Configuration
 
