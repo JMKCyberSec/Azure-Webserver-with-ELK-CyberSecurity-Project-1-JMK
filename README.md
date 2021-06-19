@@ -94,7 +94,7 @@ It is a good idea to generate a key pair on your host machine to prepare you for
 We used Microsoft Azure to build our virtual environment. The following Azure resources were created and utilized;
 - 1). Resource Group - ResourceGroupA, region: East US 2.  All resources were contained inside this resource group
 - 2). Virtual Network 1 of 2 - JMKCyberSecVNetA, region: East US 2, ip addresses: default, DDoS Protection: DISABLE.
-- 3). Network Security Group (NSG) - JMKCSVNSG, region: East US 2, created with an initial DENY ALL security rule.
+- 3). Network Security Group (NSG) 1 of 2 - JMKCSVNSG, region: East US 2, created with an initial DENY ALL security rule.
 - 4). Virtual Machine 1 of 5 - Jump-Box, region: East US 2, size: B1s, must have public IP.
 - 5). Virtual Machine 2 of 5 - Web-1, region: East US 2, size: B1ms, must NOT have a public IP.
 - 6). Virtual Machine 3 of 5 - Web-2, region: East US 2, size: B1ms, must NOT have a public IP.
@@ -105,7 +105,13 @@ We used Microsoft Azure to build our virtual environment. The following Azure re
       - Add a Load Balancing Rule - JMK_LoadBalance_Rule1: TCP, to allow port 80, backend port 80 as well, select your Health Probe and Backend Pool, Client IP and Protocol Persistance.
 - 9). Virtual Network 2 of 2 - ELKVNet, region: West US 2, IP Addresses: default, DDoS Protection: DISABLE.
       - Peering - Create a peer connection between your 2 Virtual Networks (since your VNets are located in different regions).
-- 10). Virtual Machine 5 of 5 - ELKStack, region: West US 2, size: B2s (must be minimum 4GB RAM) must have a public IP.
+- 10). Network Security Group (NSG) 2 of 2 - ELKStackNSG, region: West US 2.
+- 11). Virtual Machine 5 of 5 - ELKStack, region: West US 2, size: B2s (must be minimum 4GB RAM) must have a public IP.
+
+You will need a few Inbound Security Rules in place;
+- Navigate to your Azure Web Portal Network Security Group. 
+  - Create an Inbound Rule AllowSSH - Source: Ip Address "home public IP", Source port: *, Destination: VNet, Service: SSH, Dest Port: 22, Protocol: TCP, ALLOW
+  - Create an Inbound Rule AllowJumptoVNet - Source: IP Address 10.0.0.4, Source port: *, Destination VNet, Service: SSH, Dest Port: 22, Protocol: TCP, ALLOW 
 
 
 ### Ansible/Docker Container Configuration 
@@ -117,8 +123,6 @@ One of the most critical components of this system is the Ansible Docker Contain
    - Run `sudo systemctl status docker` - run this to confirm that docker is if it is not run `sudo systemctl start docker`
    - Run `sudo docker pull cyberxsecurity/ansible` - this will pull the cyberxsecurity/ansible container.
    - Run `sudo docker run -ti cyberxsecurity/ansible:latest bash` - this will start the container for the initial run, do not use this to subsequently start the container (it will build a new container). 
-   - Navigate to your Azure Web Portal Network Security Group. 
-    - Create a Inbound Rule that allows your Jump-box full access via SSH to your VNet - Source port: *, Destination: VNet, Dest Port: 22, Protocol: TCP, ALLOW
    - Using your Command line logged into your Jump-Box run `sudo docker container list -a` to list you containers and see your container name, take note. 
    - Run `sudo docker start "yourcontainer_name"` - This starts the container.
    - Run `sudo docker attach "yourcontainer_name"` - This logs you into your container.
@@ -137,8 +141,20 @@ One of the most critical components of this system is the Ansible Docker Contain
    - Run `exit`
    - Run `cd /etc/ansible` - This will navigate you into the Containers /etc/ansible folder.
    - Run `ls` = this will list the contents and you should verify that you have a hosts file and an ansible.cfg file. 
-   - The /etc/ansible/hosts file should match this (IP addresses may differ)  
-
+   - The /etc/ansible/hosts file should match this (IP addresses may differ) file;
+      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/hosts 
+      Feel free to copy and paste the contents or edit your existing file to match. 
+   - The /etc/ansible/ansible.cfg file should match this (Usernames and IP addresses may differ) file;
+      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/ansible.cfg
+      Feel free to copy and paste the contents or edit your existing filr to match.
+      * Please note, we have already edited the hosts and ansible.cfg files to accommodate the ELKStack server. 
+   - While in the /etc/ansible directory Run `ansible-playbook DVWAPlaybook.yml` - this will build the DVWA Containers on Web-1 Web-2 and Web-3.
+   - SSH into Web-1 We-2 and Web-3 and Run `curl localhost/setup.php` verify that <html> code was returned for each VM. 
+   - Go back the the Azure Web Portal and nagigate to the Network Security Group. 
+   - Go to Inbound Rules and click "ADD". 
+   - Configure a rule that allows your public IP address from your host machine to access the Virtual Network via port 80 use "Any" Protocol. 
+   - Delete the rule to Deny All Inbound traffic.   
+      
 ### Elk Configuration
 
 Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because additional VM's or entire environments can be brought online very quickly and with few, if any, issues.
@@ -150,12 +166,21 @@ The ELKPlaybook.yml is an ansible playbook that implements the following tasks:
 - ... Downloads and configures the following ELK Docker Container Image: sebp/elk:761
 - ... Enables docker service upon boot
 
-The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
-
-https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png
-
-
-### Using the Playbook
+To Install the Monitoring System onto the ELKStack run the following commands;
+  - Run `cd /etc/ansible`  - this places you into the /etc/ansible directory. 
+  - Copy the contents of the provided ELKplaybook.yml onto your clipboard
+  - Run `nano ELKplaybook.yml` - This creates and opens ELKplaybook.yml in nano. Paste the contents into the Nano file. Hit "Ctl+X" - "Y" - "ENTER"
+  - Run `ansible-playbook ELKplaybook.yml` - This installs the container on the ELKStack VM and logs you into the container.
+  - Run `ssh elkadmin@10.1.0.4`
+  - Run `docker ps` - this step allows you to verify that the sebp/elk:761 container is running.
+     The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
+     https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png
+  - Go to your Azure Web portal. Navigate to your ELKStackNSG and click on "inbound rules". Click "ADD".
+  - Create a rule that allows TCP traffic from your home public IP address to the ELKStack public ip address on port 5601.
+  - Verify you have access by opening a browser and navigating to http://[yourELKStackpublicip]:5601/app/kibana 
+  
+  
+### Using the Filebeat and Metricbeat playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
