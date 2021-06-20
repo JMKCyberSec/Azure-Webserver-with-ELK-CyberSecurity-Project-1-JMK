@@ -184,8 +184,8 @@ To Install the Monitoring System onto the ELKStack run the following commands;
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
-- Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml.
-- Update the hosts file to include any of the VM's you want to install the Filebeat utility on.
+- Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml. (you may need to `mkdir roles` inside the ansible directory.)
+- Update the hosts file to include any of the VM's you want to install the Filebeat utility on. (if you have already used our version of the hosts file, these edits are finished and you are already ready to run the playbook. It is likely you will need to edit the VM IP address in the file to your unique IP's.  
    - [webservers]
    - 10.0.0.5 ansible_python_interpreter=/usr/bin/python3
    - 10.0.0.6 ansible_python_interpreter=/usr/bin/python3
