@@ -148,6 +148,8 @@ One of the most critical components of this system is the Ansible Docker Contain
       https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/ansible.cfg
       Feel free to copy and paste the contents or edit your existing filr to match.
       * Please note, we have already edited the hosts and ansible.cfg files to accommodate the ELKStack server. 
+   - Download and locate the following playbook.yml file in /etc/ansible directory:
+     Playbook File https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/DVWAPlaybook.yml   
    - While in the /etc/ansible directory Run `ansible-playbook DVWAPlaybook.yml` - this will build the DVWA Containers on Web-1 Web-2 and Web-3.
    - SSH into Web-1 We-2 and Web-3 and Run `curl localhost/setup.php` verify that <html> code was returned for each VM. 
    - Go back the the Azure Web Portal and nagigate to the Network Security Group. 
@@ -185,12 +187,25 @@ In order to use the playbook, you will need to have an Ansible control node alre
 
 SSH into the control node and follow the steps below:
 - Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml. (you may need to `mkdir roles` inside the ansible directory.)
-- Update the hosts file to include any of the VM's you want to install the Filebeat utility on. (if you have already used our version of the hosts file, these edits are finished and you are already ready to run the playbook. It is likely you will need to edit the VM IP address in the file to your unique IP's.  
+  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/filebeatplaybook.yml
+- Copy the playbook.yml file to /etc/ansible/roles/metricbeatplaybook.yml. 
+  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/metricbeatplaybook.yml
+- Update the hosts file to include any of the VM's you want to install the Filebeat utility on.   
    - [webservers]
    - 10.0.0.5 ansible_python_interpreter=/usr/bin/python3
    - 10.0.0.6 ansible_python_interpreter=/usr/bin/python3
    - 10.0.0.7 ansible_python_interpreter=/usr/bin/python3
+- Download the following files and locate them in the /etc/ansible/files directory (you may need to `mkdir files` in the /etx/ansible directory).
+  1). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/filebeat-config.yml
+  2). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/metricbeat-config.yml  
+    - Edit the /etc/ansible/files/filebeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4) 
+      See image:  https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Filebeatconfig_edits.png  
+    - Edit the /etc/ansible/files/metricbeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4)
+      See image:  https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Metricbeatconfig_edits.png
+  
 - Run the playbook, and navigate to Kibana to verify that the installation worked as expected.
+- In your web browser enter `https://[your.elkstack.public.ip]:5601/app/kibana. 
+- Confirm that Kibana loads on your browser. 
 
 **** FAQ's
 - _Which file is the playbook? Ansible playbook files end in '.yml'. Playbook files used for this system are as follows;
@@ -209,3 +224,46 @@ SSH into the control node and follow the steps below:
 
 *** If you would like to install an ELK server onto you system I have provided the following commands that you will utilize when installing the files in this repository. 
 - 
+**** Here is a list of the common commands you will utilize during this setup;
+- SSH
+  `ssh [yourusername]@[your.vm.ip.address]` - this will log you into your VM's from the command line.
+  `ssh-keygen` - This will generate an asymmetrical key pair (1 public and 1 private).
+  `cat ~/.ssh/id_rsa.pub - this will display your public key which you will copy and paste into the Azure Web Portal for your VM's.
+  
+- apt 
+  `sudo apt update` - This discovers any available updates to your Ubuntu OS.
+  `sudo apt upgrade` - This installs any available updates to your Ubuntu OS. 
+  `sudo apt install docker.io` - This installs docker onto the machine you run the command on. (This is installed on your Jump-Box manually with this command) 
+
+- docker
+  `sudo systemctl status docker` - This check if docker is running.
+  `sudo systemctl start docker` - This starts docker on your system if you need to start it. 
+  `sudo docker pull cyberxsecurity/ansible` - This will pull the Docker container from the repo to your machine.
+  `sudo docker run -ti cyberxsecurity/ansible:latest bash` - this will start the container for the initial run, only use this command once. 
+  `sudo docker container list -a - this will list your docker container(s) details. 
+  `sudo docker start [container_name]` - This will start your container.
+  `sudo docker attach [container_name]` - This will log you into your container.
+  `sudo docker ps` - this will display your container info that you are currently logged-in to. 
+  `sudo docker stop` - this will stop a container (similar to shutting down a VM).
+  `exit` - This will log you out or exit you from the ssh connections or from your docker container. 
+  
+- ansible
+  `ansible-playbook [your_playbook_name.yml]` - this will execute or run your playbook. 
+  `nano [your_playbook_name.yml]` - This will open your playbook (or create it if it doesnt exist) for editing. 
+  `ansible all -m ping` - this will ping the VM's that exist in the "/etc/ansible/hosts" file. 
+  
+- curl
+  `curl [url to files on github] - this is a tried and tested way to get files from the web into various VM's. 
+  `curl localhost/setup.php` - This tests the connection and the DVWA container. It should return <html> and that indicates it is working properly. 
+  
+- general cmd
+  `ls`
+  `mv`
+  `cd`
+  `ls -la`
+  `nano`
+  `exit`
+  `cp`
+  
+  
+  
