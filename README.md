@@ -196,7 +196,9 @@ SSH into the control node and follow the steps below:
    - 10.0.0.6 ansible_python_interpreter=/usr/bin/python3
    - 10.0.0.7 ansible_python_interpreter=/usr/bin/python3
 - Download the following files and locate them in the /etc/ansible/files directory (you may need to `mkdir files` in the /etx/ansible directory).
+  
   1). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/filebeat-config.yml
+  
   2). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/metricbeat-config.yml  
     - Edit the /etc/ansible/files/filebeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4) 
       See image:  https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Filebeatconfig_edits.png  
