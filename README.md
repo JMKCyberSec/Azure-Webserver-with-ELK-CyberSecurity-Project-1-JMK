@@ -142,14 +142,14 @@ One of the most critical components of this system is the Ansible Docker Contain
    - Run `cd /etc/ansible` - This will navigate you into the Containers /etc/ansible folder.
    - Run `ls` = this will list the contents and you should verify that you have a hosts file and an ansible.cfg file. 
    - The /etc/ansible/hosts file should match this (IP addresses may differ) file;
-      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/hosts 
+      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/hosts 
       Feel free to copy and paste the contents or edit your existing file to match. 
    - The /etc/ansible/ansible.cfg file should match this (Usernames and IP addresses may differ) file;
-      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/ansible.cfg
+      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/ansible.cfg
       Feel free to copy and paste the contents or edit your existing filr to match.
       * Please note, we have already edited the hosts and ansible.cfg files to accommodate the ELKStack server. 
    - Download and locate the following playbook.yml file in /etc/ansible directory:
-     Playbook File https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/DVWAPlaybook.yml   
+     Playbook File https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/DVWAPlaybook.yml   
    - While in the /etc/ansible directory Run `ansible-playbook DVWAPlaybook.yml` - this will build the DVWA Containers on Web-1 Web-2 and Web-3.
    - SSH into Web-1 We-2 and Web-3 and Run `curl localhost/setup.php` verify that <html> code was returned for each VM. 
    - Go back the the Azure Web Portal and nagigate to the Network Security Group. 
@@ -187,17 +187,17 @@ In order to use the playbook, you will need to have an Ansible control node alre
 
 SSH into the control node and follow the steps below:
 - Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml. (you may need to `mkdir roles` inside the ansible directory.)
-  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/filebeatplaybook.yml
+  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml
 - Copy the playbook.yml file to /etc/ansible/roles/metricbeatplaybook.yml. 
-  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/playbooks/metricbeatplaybook.yml
+  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/metricbeatplaybook.yml
 - Update the hosts file to include any of the VM's you want to install the Filebeat utility on.   
    - [webservers]
    - 10.0.0.5 ansible_python_interpreter=/usr/bin/python3
    - 10.0.0.6 ansible_python_interpreter=/usr/bin/python3
    - 10.0.0.7 ansible_python_interpreter=/usr/bin/python3
 - Download the following files and locate them in the /etc/ansible/files directory (you may need to `mkdir files` in the /etx/ansible directory).
-  1). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/filebeat-config.yml
-  2). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Anisble/metricbeat-config.yml  
+  1). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/filebeat-config.yml
+  2). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/metricbeat-config.yml  
     - Edit the /etc/ansible/files/filebeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4) 
       See image:  https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Filebeatconfig_edits.png  
     - Edit the /etc/ansible/files/metricbeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4)
