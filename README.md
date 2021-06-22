@@ -3,14 +3,15 @@
 ## Automated ELK Stack Deployment
 
 The files in this repository were used to configure the network depicted below.
+
   [Elk-Network_Diagram](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Diagrams/XCorpTandT_Net_Diagram_with_ELK.pdf)
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to recreate the entire deployment pictured above. Alternatively, select ansible-playbook files may be used to install only certain pieces of it, such as Filebeat. Below are the 4 playbooks in order of deployment when building and configuring the Network above. 
 
-   - https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/DVWAPlaybook.yml
-   - https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/ELKplaybook.yml 
-   - https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml
-   - https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/metricbeatplaybook.yml
+  [DVWAPlaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/DVWAPlaybook.yml)
+  [ELKplaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/ELKplaybook.yml) 
+  [Filebeatplaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml)
+  [Metricbeatplaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/metricbeatplaybook.yml)
 
 This document contains the following details:
 - Description of the Topology
@@ -87,7 +88,7 @@ It is a good idea to generate a key pair on your host machine to prepare you for
    -  `cat ~/.ssh/id_rsa.pub` 
    -  This key you will use to log into your Jump-Box and you can use it while setting up your other VM's. However, you will need to generate a different set of keys in your ansible container that resides inside your Jump-Box VM once you get the container installed for Web-1, Web-2, Web-3, and ELKStack VM's. This increases security of the Azure environment by utilizing two different set of keys. Navagation to each VM in the Azure Web Portal and scrolling down in the menu to password reset will be required once the container is up and running and the second set of keys are generated inside the container. 
    
-   -  See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/AzureVMresetPassword.png 
+   -  [See Azure Reset Password image](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/AzureVMresetPassword.png) 
 
 
 We used Microsoft Azure to build our virtual environment. The following Azure resources were created and utilized;
@@ -140,15 +141,13 @@ One of the most critical components of this system is the Ansible Docker Contain
    - Run `exit`
    - Run `cd /etc/ansible` - This will navigate you into the Containers /etc/ansible folder.
    - Run `ls` = this will list the contents and you should verify that you have a hosts file and an ansible.cfg file. 
-   - The /etc/ansible/hosts file should match this (IP addresses may differ) file;
-      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/hosts 
+   - The /etc/ansible/hosts file should match (IP addresses may differ) [this hosts file;](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/hosts)
       Feel free to copy and paste the contents or edit your existing file to match. 
-   - The /etc/ansible/ansible.cfg file should match this (Usernames and IP addresses may differ) file;
-      https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/ansible.cfg
+   - The /etc/ansible/ansible.cfg file should match (Usernames and IP addresses may differ) [this ansible.cfg file;](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/ansible.cfg)
       Feel free to copy and paste the contents or edit your existing filr to match.
       * Please note, we have already edited the hosts and ansible.cfg files to accommodate the ELKStack server. 
    - Download and locate the following playbook.yml file in /etc/ansible directory:
-     Playbook File https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/DVWAPlaybook.yml   
+     [DVWAPlaybook.yml File](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/DVWAPlaybook.yml)  
    - While in the /etc/ansible directory Run `ansible-playbook DVWAPlaybook.yml` - this will build the DVWA Containers on Web-1 Web-2 and Web-3.
    - SSH into Web-1 We-2 and Web-3 and Run `curl localhost/setup.php` verify that <html> code was returned for each VM. 
    - Go back the the Azure Web Portal and nagigate to the Network Security Group. 
@@ -174,8 +173,7 @@ To Install the Monitoring System onto the ELKStack run the following commands;
   - Run `ansible-playbook ELKplaybook.yml` - This installs the container on the ELKStack VM and logs you into the container.
   - Run `ssh elkadmin@10.1.0.4`
   - Run `docker ps` - this step allows you to verify that the sebp/elk:761 container is running.
-     The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
-     https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png
+     The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance [Screenshot](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png) 
   - Go to your Azure Web portal. Navigate to your ELKStackNSG and click on "inbound rules". Click "ADD".
   - Create a rule that allows TCP traffic from your home public IP address to the ELKStack public ip address on port 5601.
   - Verify you have access by opening a browser and navigating to http://[yourELKStackpublicip]:5601/app/kibana 
@@ -186,7 +184,7 @@ In order to use the playbook, you will need to have an Ansible control node alre
 
 SSH into the control node and follow the steps below:
 - Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml. (you may need to `mkdir roles` inside the ansible directory.)
-  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml
+  [Playbook File:](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml)
 - Copy the playbook.yml file to /etc/ansible/roles/metricbeatplaybook.yml. 
   Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/metricbeatplaybook.yml
 - Update the hosts file to include any of the VM's you want to install the Filebeat utility on.   
