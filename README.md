@@ -9,8 +9,11 @@ The files in this repository were used to configure the network depicted below.
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to recreate the entire deployment pictured above. Alternatively, select ansible-playbook files may be used to install only certain pieces of it, such as Filebeat. Below are the 4 playbooks in order of deployment when building and configuring the Network above. 
 
   [DVWAPlaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/DVWAPlaybook.yml)
-  [ELKplaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/ELKplaybook.yml) 
+  
+  [ELKplaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/ELKplaybook.yml)
+  
   [Filebeatplaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml)
+  
   [Metricbeatplaybook.yml](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/metricbeatplaybook.yml)
 
 This document contains the following details:
