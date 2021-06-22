@@ -201,8 +201,10 @@ SSH into the control node and follow the steps below:
   1). [Filebeat Config file](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/filebeat-config.yml)
   
   2). [Metricbeat Config file](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/metricbeat-config.yml)  
+    
     - Edit the /etc/ansible/files/filebeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4) 
       [See filebeat edits image](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Filebeatconfig_edits.png)  
+    
     - Edit the /etc/ansible/files/metricbeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4)
       [See metricbeat edits image](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Metricbeatconfig_edits.png)
   
