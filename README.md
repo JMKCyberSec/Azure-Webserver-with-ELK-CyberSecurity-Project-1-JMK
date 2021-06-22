@@ -176,7 +176,8 @@ To Install the Monitoring System onto the ELKStack run the following commands;
   - Run `ansible-playbook ELKplaybook.yml` - This installs the container on the ELKStack VM and logs you into the container.
   - Run `ssh elkadmin@10.1.0.4`
   - Run `docker ps` - this step allows you to verify that the sebp/elk:761 container is running.
-     The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance [Screenshot](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png) 
+     The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance 
+     [Screenshot](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/docker_ps.png) 
   - Go to your Azure Web portal. Navigate to your ELKStackNSG and click on "inbound rules". Click "ADD".
   - Create a rule that allows TCP traffic from your home public IP address to the ELKStack public ip address on port 5601.
   - Verify you have access by opening a browser and navigating to http://[yourELKStackpublicip]:5601/app/kibana 
@@ -187,9 +188,9 @@ In order to use the playbook, you will need to have an Ansible control node alre
 
 SSH into the control node and follow the steps below:
 - Copy the playbook.yml file to /etc/ansible/roles/filebeatplaybook.yml. (you may need to `mkdir roles` inside the ansible directory.)
-  [Playbook File:](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml)
+  [Filebeat Playbook File:](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/filebeatplaybook.yml)
 - Copy the playbook.yml file to /etc/ansible/roles/metricbeatplaybook.yml. 
-  Playbook File: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/metricbeatplaybook.yml
+  [Metricbeat Playbook File:](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/playbooks/metricbeatplaybook.yml)
 - Update the hosts file to include any of the VM's you want to install the Filebeat utility on.   
    - [webservers]
    - 10.0.0.5 ansible_python_interpreter=/usr/bin/python3
@@ -197,13 +198,13 @@ SSH into the control node and follow the steps below:
    - 10.0.0.7 ansible_python_interpreter=/usr/bin/python3
 - Download the following files and locate them in the /etc/ansible/files directory (you may need to `mkdir files` in the /etx/ansible directory).
   
-  1). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/filebeat-config.yml
+  1). [Filebeat Config file](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/filebeat-config.yml)
   
-  2). https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/metricbeat-config.yml  
+  2). [Metricbeat Config file](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Ansible/metricbeat-config.yml)  
     - Edit the /etc/ansible/files/filebeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4) 
-      See image:  https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Filebeatconfig_edits.png  
+      [See filebeat edits image](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Filebeatconfig_edits.png)  
     - Edit the /etc/ansible/files/metricbeat-config.yml with the following edits; (you will enter your IP address example: 10.1.0.4)
-      See image:  https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Metricbeatconfig_edits.png
+      [See metricbeat edits image](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Metricbeatconfig_edits.png)
   
 - Run the playbook, and navigate to Kibana to verify that the installation worked as expected.
 - In your web browser enter `https://[your.elkstack.public.ip]:5601/app/kibana. 
@@ -217,10 +218,10 @@ SSH into the control node and follow the steps below:
    - metricbeatplaybook.yml   (Installs the metricbeat application onto the DVWA Servers)
 
 - _Which file do you update to make Ansible run the playbook on a specific machine? You update the /etc/ansible/hosts file and you can call out different groups    in which the playbook will look for to know what machines to run the playbook on. 
-             See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Ansible_hosts.png 
+             [See Ansible hosts image](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/Ansible_hosts.png) 
 
 - _How do I specify which machine to install the ELK server on versus which to install Filebeat on? In the playbook file in the very first section on line 3 it      calls out which host to look for to run the playbook on. 
-             See image: https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/playbook_which_host.png 
+             [See which host image](https://github.com/JMKCyberSec/Azure-Webserver-with-ELK-CyberSecurity-Project-1-JMK/blob/main/Images/playbook_which_host.png) 
                  You edit that line to either webservers or elk in this scenario. (You have at this point already defined what machines are in the webservers                      group and what machines are in the elk group. 
 - _Which URL do you navigate to in order to check that the ELK server is running? http://20.94.216.169:5601/ 
 
